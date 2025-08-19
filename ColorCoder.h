@@ -26,6 +26,12 @@ namespace TelCoColorCoder
 
     ColorPair GetColorFromPairNumber(int pairNumber);
     int GetPairNumberFromColor(MajorColor major, MinorColor minor);
+
+
+std::vector<std::string> BuildColorReferenceTable();
+void PrintColorReferenceManual(
+const std::function<void(const std::string&)>& printer);
+
 }
 
 #endif // COLORCODER_H
