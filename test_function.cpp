@@ -1,42 +1,36 @@
-// #include <iostream>
-// #include <assert.h>
-// #include "ColorCoder.h"
-// #include "test_functions.h"
-
-// void testNumberToPair(int pairNumber,
-//     TelCoColorCoder::MajorColor expectedMajor,
-//     TelCoColorCoder::MinorColor expectedMinor)
-// {
-//     TelCoColorCoder::ColorPair colorPair =
-//         TelCoColorCoder::GetColorFromPairNumber(pairNumber);
-//     std::cout << "Got pair " << colorPair.ToString() << std::endl;
-//     assert(colorPair.getMajor() == expectedMajor);
-//     assert(colorPair.getMinor() == expectedMinor);
-// }
-
-// void testPairToNumber(
-//     TelCoColorCoder::MajorColor major,
-//     TelCoColorCoder::MinorColor minor,
-//     int expectedPairNumber)
-// {
-//     int pairNumber = TelCoColorCoder::GetPairNumberFromColor(major, minor);
-//     std::cout << "Got pair number " << pairNumber << std::endl;
-//     assert(pairNumber == expectedPairNumber);
-// }
 #include "gtest/gtest.h"
 #include "ColorCoder.h"
 
 using namespace TelCoColorCoder;
 
+// ---- Helper functions (previously test_functions.h/.cpp) ----
+void testNumberToPair(int pairNumber,
+    TelCoColorCoder::MajorColor expectedMajor,
+    TelCoColorCoder::MinorColor expectedMinor)
+{
+    ColorPair colorPair = GetColorFromPairNumber(pairNumber);
+    EXPECT_EQ(colorPair.getMajor(), expectedMajor);
+    EXPECT_EQ(colorPair.getMinor(), expectedMinor);
+}
+
+void testPairToNumber(
+    TelCoColorCoder::MajorColor major,
+    TelCoColorCoder::MinorColor minor,
+    int expectedPairNumber)
+{
+    int pairNumber = GetPairNumberFromColor(major, minor);
+    EXPECT_EQ(pairNumber, expectedPairNumber);
+}
+
+// ---- GoogleTest test cases ----
 TEST(ColorCoderTests, NumberToPair) {
-    ColorPair colorPair = GetColorFromPairNumber(4);
-    EXPECT_EQ(colorPair.getMajor(), WHITE);
-    EXPECT_EQ(colorPair.getMinor(), BROWN);
+    testNumberToPair(4, WHITE, BROWN);
+    testNumberToPair(5, WHITE, SLATE);
 }
 
 TEST(ColorCoderTests, PairToNumber) {
-    int pairNumber = GetPairNumberFromColor(BLACK, ORANGE);
-    EXPECT_EQ(pairNumber, 12);
+    testPairToNumber(BLACK, ORANGE, 12);
+    testPairToNumber(VIOLET, SLATE, 25);
 }
 
 TEST(ColorCoderTests, ManualTableSize) {
@@ -47,6 +41,7 @@ TEST(ColorCoderTests, ManualTableSize) {
 TEST(ColorCoderTests, ManualOutputInjection) {
     std::vector<std::string> output;
     auto mockPrinter = [&](const std::string& line){ output.push_back(line); };
+
     PrintColorReferenceManual(mockPrinter);
 
     EXPECT_GT(output.size(), 1); // must have header + entries
