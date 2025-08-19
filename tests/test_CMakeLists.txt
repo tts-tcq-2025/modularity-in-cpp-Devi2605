@@ -1,0 +1,10 @@
+# Download and link GoogleTest
+add_subdirectory(${CMAKE_SOURCE_DIR}/external/googletest googletest)
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+# Test executable (only one file now)
+add_executable(runTests test_colorcode.cpp)
+target_link_libraries(runTests gtest gtest_main colorcoder)
+
+# Register tests with CTest
+add_test(NAME AllTests COMMAND runTests)
